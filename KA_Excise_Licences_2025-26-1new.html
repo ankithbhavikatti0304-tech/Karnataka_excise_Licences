@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
+<title>KA Excise — Licences 2025-26</title>
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Noto+Sans:wght@400;500;600&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --bg:#080e1a;--surf:#0e1929;--surf2:#142035;
+  --border:rgba(255,255,255,0.07);
+  --gold:#f5a623;--teal:#00d2d3;--pink:#ff6b9d;--blue:#4facfe;
+  --text:#e8edf5;--muted:rgba(232,237,245,0.45);
+  --bottom:env(safe-area-inset-bottom,0px);
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+html,body{height:100dvh;overflow:hidden;background:var(--bg);color:var(--text);font-family:'Noto Sans',sans-serif;}
+
+/* BG */
+body::before{content:'';position:fixed;inset:0;background:
+  radial-gradient(ellipse 80% 60% at 20% 10%,rgba(0,210,211,0.07) 0%,transparent 60%),
+  radial-gradient(ellipse 60% 40% at 80% 90%,rgba(245,166,35,0.07) 0%,transparent 60%);
+  pointer-events:none;z-index:0;}
+
+/* LAYOUT */
+.app{position:relative;z-index:1;height:100dvh;display:flex;flex-direction:column;}
+
+/* HEADER */
+header{flex-shrink:0;padding:14px 16px 10px;background:rgba(8,14,26,0.9);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);}
+.header-top{display:flex;align-items:center;gap:10px;}
+.header-icon{width:36px;height:36px;background:linear-gradient(135deg,var(--gold),#ff6b35);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;}
+.header-title{font-family:'Rajdhani',sans-serif;font-size:17px;font-weight:700;color:#fff;line-height:1.1;}
+.header-sub{font-size:10px;color:var(--teal);font-weight:600;letter-spacing:0.05em;margin-top:2px;}
+.header-badge{margin-left:auto;background:rgba(245,166,35,0.15);border:1px solid rgba(245,166,35,0.3);color:var(--gold);font-size:10px;font-weight:700;padding:3px 8px;border-radius:20px;white-space:nowrap;}
+
+/* TABS */
+.tabs{flex-shrink:0;display:flex;gap:4px;padding:8px 12px;overflow-x:auto;scrollbar-width:none;}
+.tabs::-webkit-scrollbar{display:none;}
+.tab{flex-shrink:0;padding:5px 12px;border-radius:20px;font-size:11.5px;font-weight:600;font-family:'Rajdhani',sans-serif;cursor:pointer;border:1px solid var(--border);color:var(--muted);background:var(--surf);transition:all .2s;white-space:nowrap;}
+.tab.active{background:linear-gradient(135deg,var(--teal),#0099ff);color:#fff;border-color:transparent;}
+
+/* SCROLL */
+.scroll{flex:1;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;padding:8px 12px calc(70px + var(--bottom));}
+.scroll::-webkit-scrollbar{display:none;}
+
+/* DIVISION CARD */
+.div-card{background:var(--surf);border:1px solid var(--border);border-radius:16px;margin-bottom:10px;overflow:hidden;}
+.div-header{display:flex;align-items:center;gap:10px;padding:12px 14px;cursor:pointer;user-select:none;}
+.div-icon{width:34px;height:34px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0;}
+.div-name{font-family:'Rajdhani',sans-serif;font-size:15px;font-weight:700;color:#fff;flex:1;}
+.div-total{font-family:'Rajdhani',sans-serif;font-size:18px;font-weight:700;color:var(--gold);}
+.div-arrow{font-size:12px;color:var(--muted);transition:transform .3s;}
+.div-card.open .div-arrow{transform:rotate(180deg);}
+
+/* DISTRICT ROWS */
+.districts{display:none;border-top:1px solid var(--border);}
+.div-card.open .districts{display:block;}
+.district-row{padding:10px 14px;border-bottom:1px solid var(--border);cursor:pointer;}
+.district-row:last-child{border-bottom:none;}
+.district-row.active{background:rgba(0,210,211,0.06);}
+.dist-top{display:flex;align-items:center;justify-content:space-between;}
+.dist-name{font-size:13px;font-weight:600;color:var(--text);}
+.dist-total{font-family:'Rajdhani',sans-serif;font-size:15px;font-weight:700;color:var(--teal);}
+.dist-bars{margin-top:7px;display:grid;grid-template-columns:repeat(3,1fr);gap:5px;}
+.bar-item{background:var(--surf2);border-radius:8px;padding:5px 7px;}
+.bar-label{font-size:9px;color:var(--muted);font-weight:600;letter-spacing:0.03em;}
+.bar-val{font-family:'Rajdhani',sans-serif;font-size:14px;font-weight:700;color:#fff;margin-top:1px;}
+.bar-fill-wrap{height:3px;background:rgba(255,255,255,0.08);border-radius:2px;margin-top:3px;overflow:hidden;}
+.bar-fill{height:100%;border-radius:2px;transition:width .6s ease;}
+
+/* SUMMARY CARD */
+.summary{background:var(--surf);border:1px solid var(--border);border-radius:16px;padding:14px;margin-bottom:10px;}
+.summary-title{font-family:'Rajdhani',sans-serif;font-size:13px;font-weight:700;color:var(--muted);letter-spacing:0.05em;margin-bottom:10px;}
+.summary-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;}
+.sum-item{background:var(--surf2);border-radius:10px;padding:10px 12px;}
+.sum-label{font-size:10px;color:var(--muted);font-weight:600;}
+.sum-val{font-family:'Rajdhani',sans-serif;font-size:20px;font-weight:700;color:var(--gold);margin-top:2px;}
+.sum-sub{font-size:9px;color:var(--muted);margin-top:1px;}
+
+/* STATE OVERVIEW */
+.state-bar{display:flex;gap:6px;overflow-x:auto;padding:2px 0 8px;scrollbar-width:none;}
+.state-bar::-webkit-scrollbar{display:none;}
+.state-chip{flex-shrink:0;background:var(--surf2);border-radius:10px;padding:8px 12px;text-align:center;min-width:90px;}
+.sc-val{font-family:'Rajdhani',sans-serif;font-size:18px;font-weight:700;}
+.sc-label{font-size:9px;color:var(--muted);font-weight:600;margin-top:1px;}
+
+/* FOOTER */
+.dev-footer{position:fixed;bottom:0;left:0;right:0;z-index:100;text-align:center;padding:8px 16px calc(8px + var(--bottom));font-size:10.5px;font-weight:700;color:#00d2d3;background:rgba(8,14,26,0.95);border-top:1px solid rgba(0,210,211,0.15);font-family:'Noto Sans',sans-serif;letter-spacing:0.04em;}
+</style>
+</head>
+<body>
+<div class="app">
+  <header>
+    <div class="header-top">
+      <div class="header-icon">🏛️</div>
+      <div>
+        <div class="header-title">Karnataka Excise</div>
+        <div class="header-sub">LICENCE DATA — FEB 2026</div>
+      </div>
+      <div class="header-badge">2025-26</div>
+    </div>
+  </header>
+
+  <div class="tabs" id="tabs">
+    <div class="tab active" data-tab="overview">Overview</div>
+    <div class="tab" data-tab="bengaluru-n">BLR North</div>
+    <div class="tab" data-tab="bengaluru-s">BLR South</div>
+    <div class="tab" data-tab="bengaluru-r">BLR Rural</div>
+    <div class="tab" data-tab="belagavi">Belagavi</div>
+    <div class="tab" data-tab="davanagere">Davanagere</div>
+    <div class="tab" data-tab="hospet">Hospet</div>
+    <div class="tab" data-tab="kalburagi">Kalburagi</div>
+    <div class="tab" data-tab="mangaluru">Mangaluru</div>
+    <div class="tab" data-tab="mysuru">Mysuru</div>
+  </div>
+
+  <div class="scroll" id="content"></div>
+</div>
+
+<div class="dev-footer">Developed by <strong>Shivu Bhavikatti</strong> &nbsp;|&nbsp; DYSE</div>
+
+<script>
+const DIVISIONS = [
+  {
+    id:'bengaluru-n', name:'Bengaluru North', icon:'🏙️',
+    color:'linear-gradient(135deg,#4facfe,#00f2fe)',
+    total:2144,
+    districts:[
+      {name:'BUD-1', cl2:118, cl4:12, cl7:121, cl9:194, cl11:16, others:100, total:602},
+      {name:'BUD-2', cl2:132, cl4:9,  cl7:171, cl9:166, cl11:10, others:87,  total:623},
+      {name:'BUD-3', cl2:127, cl4:11, cl7:157, cl9:167, cl11:16, others:37,  total:520},
+      {name:'BUD-4', cl2:60,  cl4:12, cl7:47,  cl9:136, cl11:6,  others:94,  total:399},
+    ]
+  },
+  {
+    id:'bengaluru-s', name:'Bengaluru South', icon:'🌆',
+    color:'linear-gradient(135deg,#43e97b,#38f9d7)',
+    total:2749,
+    districts:[
+      {name:'BUD-5', cl2:97,  cl4:7,  cl7:57,  cl9:165, cl11:6,  others:143, total:559},
+      {name:'BUD-6', cl2:118, cl4:13, cl7:97,  cl9:185, cl11:14, others:89,  total:531},
+      {name:'BUD-7', cl2:87,  cl4:9,  cl7:62,  cl9:226, cl11:4,  others:154, total:618},
+      {name:'BUD-8', cl2:140, cl4:4,  cl7:238, cl9:148, cl11:7,  others:104, total:663},
+      {name:'Kolar', cl2:104, cl4:3,  cl7:145, cl9:89,  cl11:26, others:8,   total:378},
+    ]
+  },
+  {
+    id:'bengaluru-r', name:'Bengaluru Rural', icon:'🌿',
+    color:'linear-gradient(135deg,#96fbc4,#f9f586)',
+    total:1407,
+    districts:[
+      {name:'Bengaluru Rural',  cl2:64,  cl4:3, cl7:161, cl9:61, cl11:12, others:28, total:374},
+      {name:'Chickballapura',   cl2:72,  cl4:1, cl7:81,  cl9:71, cl11:29, others:6,  total:267},
+      {name:'Ramanagara',       cl2:89,  cl4:3, cl7:60,  cl9:59, cl11:20, others:6,  total:244},
+      {name:'Tumakuru',         cl2:194, cl4:3, cl7:159, cl9:95, cl11:59, others:6,  total:522},
+    ]
+  },
+  {
+    id:'belagavi', name:'Belagavi', icon:'🌾',
+    color:'linear-gradient(135deg,#f093fb,#f5576c)',
+    total:1657,
+    districts:[
+      {name:'Bagalkote',      cl2:102, cl4:27, cl7:83,  cl9:65, cl11:44, others:0, total:326},
+      {name:'Belagavi North', cl2:135, cl4:16, cl7:79,  cl9:55, cl11:55, others:1, total:351},
+      {name:'Belagavi South', cl2:141, cl4:23, cl7:55,  cl9:95, cl11:42, others:3, total:387},
+      {name:'Vijayapura',     cl2:91,  cl4:36, cl7:56,  cl9:42, cl11:44, others:0, total:277},
+      {name:'Dharwad',        cl2:103, cl4:15, cl7:59,  cl9:96, cl11:32, others:4, total:316},
+    ]
+  },
+  {
+    id:'davanagere', name:'Davanagere', icon:'🏔️',
+    color:'linear-gradient(135deg,#f7971e,#ffd200)',
+    total:1104,
+    districts:[
+      {name:'Chickamagalur', cl2:86,  cl4:12, cl7:62, cl9:75,  cl11:29, others:2,  total:271},
+      {name:'Davanagere',    cl2:100, cl4:3,  cl7:24, cl9:114, cl11:38, others:3,  total:283},
+      {name:'Haveri',        cl2:81,  cl4:4,  cl7:41, cl9:38,  cl11:31, others:0,  total:196},
+      {name:'Shivamoga',     cl2:132, cl4:8,  cl7:85, cl9:73,  cl11:41, others:7,  total:354},
+    ]
+  },
+  {
+    id:'hospet', name:'Hospet', icon:'⛰️',
+    color:'linear-gradient(135deg,#e0c3fc,#8ec5fc)',
+    total:1003,
+    districts:[
+      {name:'Ballary',      cl2:90, cl4:1,  cl7:37, cl9:44, cl11:27, others:4, total:214},
+      {name:'Vijayanagara', cl2:81, cl4:2,  cl7:24, cl9:21, cl11:26, others:0, total:160},
+      {name:'Chitradurga',  cl2:92, cl4:1,  cl7:37, cl9:117,cl11:33, others:2, total:285},
+      {name:'Gadag',        cl2:56, cl4:12, cl7:48, cl9:24, cl11:20, others:0, total:167},
+      {name:'Koppal',       cl2:57, cl4:7,  cl7:64, cl9:18, cl11:25, others:0, total:177},
+    ]
+  },
+  {
+    id:'kalburagi', name:'Kalburagi', icon:'🏜️',
+    color:'linear-gradient(135deg,#fd746c,#ff9068)',
+    total:940,
+    districts:[
+      {name:'Bidar',    cl2:77,  cl4:2,  cl7:51, cl9:31, cl11:32, others:1, total:197},
+      {name:'Kalburagi',cl2:131, cl4:12, cl7:99, cl9:52, cl11:49, others:4, total:347},
+      {name:'Raichur',  cl2:92,  cl4:2,  cl7:60, cl9:68, cl11:36, others:0, total:268},
+      {name:'Yadgiri',  cl2:52,  cl4:2,  cl7:33, cl9:20, cl11:21, others:0, total:128},
+    ]
+  },
+  {
+    id:'mangaluru', name:'Mangaluru', icon:'🌊',
+    color:'linear-gradient(135deg,#2193b0,#6dd5ed)',
+    total:1495,
+    districts:[
+      {name:'Dakshina Kannada', cl2:154, cl4:7,  cl7:129, cl9:217, cl11:35, others:35, total:587},
+      {name:'Kodagu',           cl2:89,  cl4:20, cl7:63,  cl9:66,  cl11:12, others:5,  total:264},
+      {name:'Udupi',            cl2:89,  cl4:3,  cl7:123, cl9:202, cl11:16, others:22, total:456},
+      {name:'Uttara Kannada',   cl2:82,  cl4:3,  cl7:36,  cl9:32,  cl11:23, others:0,  total:188},
+    ]
+  },
+  {
+    id:'mysuru', name:'Mysuru', icon:'🏯',
+    color:'linear-gradient(135deg,#667eea,#764ba2)',
+    total:1798,
+    districts:[
+      {name:'Chamarajanagara', cl2:62,  cl4:1,  cl7:41,  cl9:28,  cl11:18, others:1,  total:153},
+      {name:'Hassan',          cl2:147, cl4:14, cl7:276, cl9:75,  cl11:39, others:10, total:574},
+      {name:'Mandya',          cl2:102, cl4:4,  cl7:116, cl9:86,  cl11:40, others:2,  total:353},
+      {name:'Mysuru Urban',    cl2:104, cl4:19, cl7:109, cl9:102, cl11:11, others:36, total:397},
+      {name:'Mysuru Rural',    cl2:79,  cl4:0,  cl7:170, cl9:37,  cl11:33, others:0,  total:321},
+    ]
+  },
+];
+
+const STATE_TOTAL = 14297;
+const LICENCE_TYPES = ['cl2','cl4','cl7','cl9','cl11','others'];
+const LICENCE_LABELS = ['CL-2 Retail','CL-4 Clubs','CL-7 Hotels','CL-9 Bar & Rest.','CL-11C MSIL','Wine/Other'];
+const LICENCE_COLORS = ['#4facfe','#43e97b','#f7971e','#ff6b9d','#a18cd1','#00d2d3'];
+
+let activeTab = 'overview';
+
+function $(id){return document.getElementById(id);}
+
+function renderOverview(){
+  const maxDiv = Math.max(...DIVISIONS.map(d=>d.total));
+  let html = `
+  <div class="summary">
+    <div class="summary-title">STATE TOTAL — UP TO 28 FEB 2026</div>
+    <div class="state-bar">
+      ${DIVISIONS.map(d=>`
+        <div class="state-chip">
+          <div class="sc-val" style="color:${d.id==='bengaluru-s'?'#43e97b':'#f5a623'}">${d.total.toLocaleString()}</div>
+          <div class="sc-label">${d.name.replace('Bengaluru ','BLR ')}</div>
+        </div>`).join('')}
+    </div>
+    <div class="summary-grid">
+      <div class="sum-item"><div class="sum-label">GRAND TOTAL</div><div class="sum-val">${STATE_TOTAL.toLocaleString()}</div><div class="sum-sub">All Licences Renewed/Granted</div></div>
+      <div class="sum-item"><div class="sum-label">TOTAL DIVISIONS</div><div class="sum-val">9</div><div class="sum-sub">Across Karnataka</div></div>
+      <div class="sum-item"><div class="sum-label">CL-2 RETAIL</div><div class="sum-val">4,009</div><div class="sum-sub">Retail Shops</div></div>
+      <div class="sum-item"><div class="sum-label">CL-9 BAR & REST</div><div class="sum-val">3,655</div><div class="sum-sub">Bar & Restaurant</div></div>
+    </div>
+  </div>
+  ${DIVISIONS.map(d=>`
+  <div class="div-card" id="div-${d.id}">
+    <div class="div-header" onclick="toggleDiv('${d.id}')">
+      <div class="div-icon" style="background:${d.color}">${d.icon}</div>
+      <div class="div-name">${d.name} Division</div>
+      <div class="div-total">${d.total.toLocaleString()}</div>
+      <div class="div-arrow">▼</div>
+    </div>
+    <div class="districts">
+      ${d.districts.map(dist=>districtHTML(dist, d.total)).join('')}
+    </div>
+  </div>`).join('')}`;
+  $('content').innerHTML = html;
+}
+
+function renderDivision(id){
+  const d = DIVISIONS.find(x=>x.id===id);
+  if(!d) return;
+  const html = `
+  <div class="summary">
+    <div class="summary-title">${d.name.toUpperCase()} DIVISION</div>
+    <div class="summary-grid">
+      <div class="sum-item"><div class="sum-label">DIVISION TOTAL</div><div class="sum-val" style="color:var(--teal)">${d.total.toLocaleString()}</div><div class="sum-sub">All Licences</div></div>
+      <div class="sum-item"><div class="sum-label">DISTRICTS</div><div class="sum-val">${d.districts.length}</div><div class="sum-sub">Under this Division</div></div>
+      <div class="sum-item"><div class="sum-label">STATE SHARE</div><div class="sum-val">${((d.total/STATE_TOTAL)*100).toFixed(1)}%</div><div class="sum-sub">of ${STATE_TOTAL.toLocaleString()} total</div></div>
+      <div class="sum-item"><div class="sum-label">AVG/DISTRICT</div><div class="sum-val">${Math.round(d.total/d.districts.length)}</div><div class="sum-sub">Licences per district</div></div>
+    </div>
+  </div>
+  ${d.districts.map(dist=>`
+  <div class="div-card">
+    <div class="div-header" onclick="this.parentNode.classList.toggle('open')">
+      <div class="div-icon" style="background:${d.color}">📍</div>
+      <div class="div-name">${dist.name}</div>
+      <div class="div-total">${dist.total}</div>
+      <div class="div-arrow">▼</div>
+    </div>
+    <div class="districts" style="display:none;">
+      <div style="padding:12px 14px;">
+        ${LICENCE_TYPES.map((t,i)=>`
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+          <div style="font-size:10px;color:var(--muted);width:95px;flex-shrink:0;">${LICENCE_LABELS[i]}</div>
+          <div style="flex:1;height:6px;background:rgba(255,255,255,0.07);border-radius:3px;overflow:hidden;">
+            <div style="height:100%;background:${LICENCE_COLORS[i]};border-radius:3px;width:${dist[t]?Math.max((dist[t]/dist.total)*100,2):0}%;"></div>
+          </div>
+          <div style="font-family:Rajdhani,sans-serif;font-weight:700;font-size:14px;color:#fff;width:30px;text-align:right;">${dist[t]}</div>
+        </div>`).join('')}
+      </div>
+    </div>
+  </div>`).join('')}`;
+  $('content').innerHTML = html;
+  // Make cards expand on click
+  $('content').querySelectorAll('.div-card').forEach(card=>{
+    const h = card.querySelector('.div-header');
+    h.onclick = ()=>card.classList.toggle('open');
+    const districts = card.querySelector('.districts');
+    // sync open state
+    const orig = h.onclick;
+    h.onclick = ()=>{
+      card.classList.toggle('open');
+      districts.style.display = card.classList.contains('open')?'block':'none';
+    };
+  });
+}
+
+function districtHTML(dist, divTotal){
+  return `<div class="district-row">
+    <div class="dist-top">
+      <div class="dist-name">${dist.name}</div>
+      <div class="dist-total">${dist.total}</div>
+    </div>
+    <div class="dist-bars">
+      ${[['CL-2',dist.cl2,'#4facfe'],['CL-7',dist.cl7,'#f7971e'],['CL-9',dist.cl9,'#ff6b9d']].map(([l,v,c])=>`
+      <div class="bar-item">
+        <div class="bar-label">${l}</div>
+        <div class="bar-val">${v}</div>
+        <div class="bar-fill-wrap"><div class="bar-fill" style="width:${Math.max((v/dist.total)*100,2)}%;background:${c};"></div></div>
+      </div>`).join('')}
+    </div>
+  </div>`;
+}
+
+function toggleDiv(id){
+  const el = document.getElementById('div-'+id);
+  el.classList.toggle('open');
+}
+
+function switchTab(tab){
+  activeTab = tab;
+  document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('active', t.dataset.tab===tab));
+  if(tab==='overview') renderOverview();
+  else renderDivision(tab);
+  $('content').scrollTop=0;
+}
+
+document.querySelectorAll('.tab').forEach(t=>{
+  t.addEventListener('click',()=>switchTab(t.dataset.tab));
+});
+
+renderOverview();
+</script>
+</body>
+</html>
